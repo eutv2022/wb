@@ -8,6 +8,38 @@
 
   <h1>Mi Reloj Digital</h1>
   <div id="reloj">00:00:00</div>
+<script>
+  function actualizarReloj() {
+    const ahora = new Date(); // Fecha y hora actual
+
+    let horas = ahora.getHours();      // devuelve 0–23
+    let minutos = ahora.getMinutes();  // devuelve 0–59
+    let segundos = ahora.getSeconds(); // devuelve 0–59
+
+    const ampm = horas >= 12 ? 'PM' : 'AM'; // si es mayor de 12 → PM
+
+    // Convertimos de formato 24h a 12h
+    horas = horas % 12;
+    if (horas === 0) horas = 12;
+
+    // Añadir ceros delante si es necesario
+    if (horas < 10) horas = '0' + horas;
+    if (minutos < 10) minutos = '0' + minutos;
+    if (segundos < 10) segundos = '0' + segundos;
+
+    // Unimos todo en una cadena
+    const horaFinal = `${horas}:${minutos}:${segundos} ${ampm}`;
+
+    // Ponemos el resultado dentro del HTML
+    document.getElementById('reloj').textContent = horaFinal;
+  }
+
+  // Llamar a la función cada segundo
+  setInterval(actualizarReloj, 1000);
+
+  // Llamarla inmediatamente para que no se vea en blanco al cargar
+  actualizarReloj();
+</script>
 
 </body>
 </html>
