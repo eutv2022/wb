@@ -80,7 +80,7 @@ const modoGuardado = localStorage.getItem('modo');
 if (modoGuardado === 'claro') {
   document.body.classList.add('claro');
   document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('toggleModo').textContent = '🌙 Activar modo oscuro';
+    document.getElementById('toggleModo').innerHTML = '🌙 Activar modo oscuro';
   });
 }
   // LocalStorage: Almacena preferencias
@@ -88,10 +88,10 @@ boton.addEventListener('click', () => {
   document.body.classList.toggle('claro');
 
   if (document.body.classList.contains('claro')) {
-    boton.textContent = '🌙 Activar modo oscuro';
+    boton.innerHTML = '🌙 Activar modo oscuro';
     localStorage.setItem('modo', 'claro');
   } else {
-    boton.textContent = '☀️ Activar modo claro';
+    boton.innerHTML = '☀️ Activar modo claro';
     localStorage.setItem('modo', 'oscuro');
   }
 });
