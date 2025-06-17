@@ -17,6 +17,19 @@
     font-size: 60px;
     margin-top: 20px;
   }
+    button {
+  margin-top: 30px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* Estilos para el modo claro */
+.claro {
+  background: #ffffff;
+  color: #000000;
+}
+
 </style>
 
   <meta charset="UTF-8">
@@ -26,6 +39,8 @@
 
   <h1>Mi Reloj Digital</h1>
   <div id="reloj">00:00:00</div>
+<button id="toggleModo">☀️ Activar modo claro</button>
+
 <script>
   function actualizarReloj() {
     const ahora = new Date(); // Fecha y hora actual
@@ -57,6 +72,19 @@
 
   // Llamarla inmediatamente para que no se vea en blanco al cargar
   actualizarReloj();
+  // Lógica del botón de modo claro/oscuro
+const boton = document.getElementById('toggleModo');
+
+boton.addEventListener('click', () => {
+  document.body.classList.toggle('claro');
+
+  if (document.body.classList.contains('claro')) {
+    boton.textContent = '🌙 Activar modo oscuro';
+  } else {
+    boton.textContent = '☀️ Activar modo claro';
+  }
+});
+
 </script>
 
 </body>
