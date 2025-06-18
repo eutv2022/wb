@@ -32,16 +32,17 @@
     }
 
     /* Selector 12/24 */
-    .format-toggle {
-      margin-top: 1rem;
-      font-size: 1rem;
-      color: inherit;
-    }
-    #formatSelect {
-      margin-left: 0.5rem;
-      padding: 0.25rem;
-      border-radius: 5px;
-    }
+    #toggleFormato {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  background-color: #00ff99;
+  color: #1e1e1e;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
   </style>
 </head>
 <body>
@@ -52,10 +53,7 @@
   <!-- Formato 12h / 24h -->
   <div class="format-toggle">
     <label for="formatSelect">Formato:</label>
-    <select id="formatSelect">
-      <option value="24">24h</option>
-      <option value="12">12h</option>
-    </select>
+  <button id="toggleFormato">Cambiar a 12h</button>
   </div>
 
   <!-- Botón modo claro/oscuro -->
