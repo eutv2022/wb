@@ -66,8 +66,8 @@
     const formatSelect = document.getElementById('formatSelect');
     const toggleModoBtn = document.getElementById('toggleModo');
 
-    // Cargar preferencias
-    const savedFormat = localStorage.getItem('timeFormat') || '24';
+    <!-- Cargar preferencias -->
+      const savedFormat = localStorage.getItem('timeFormat') || '24';
     formatSelect.value = savedFormat;
 
     const modoGuardado = localStorage.getItem('modo');
@@ -76,12 +76,12 @@
       toggleModoBtn.innerHTML = '🌙 Activar modo oscuro';
     }
 
-    // Cambiar formato y guardar
+    <!-- Cambiar formato y guardar -->
     formatSelect.addEventListener('change', () => {
       localStorage.setItem('timeFormat', formatSelect.value);
     });
 
-    // Cambiar modo claro/oscuro
+    <!-- Cambiar modo claro/oscuro -->
     toggleModoBtn.addEventListener('click', () => {
       document.body.classList.toggle('claro');
       if (document.body.classList.contains('claro')) {
@@ -93,7 +93,7 @@
       }
     });
 
-    // Actualizar reloj
+  <!-- Actualizar reloj -->
     function updateClock() {
       const now = new Date();
       let hours = now.getHours();
