@@ -51,17 +51,14 @@
   <div id="reloj">00:00:00</div>
 
   <!-- Formato 12h / 24h -->
-  <div class="format-toggle">
-    <label for="formatSelect">Formato:</label>
   <button id="toggleFormato">Cambiar a 12h</button>
-  </div>
 
   <!-- Botón modo claro/oscuro -->
   <button id="toggleModo">☀️ Activar modo claro</button>
 
   <script>
     const reloj = document.getElementById('reloj');
-    const formatSelect = document.getElementById('formatSelect');
+   const formatoBtn = document.getElementById('toggleFormato');
     const toggleModoBtn = document.getElementById('toggleModo');
 
 // Cargar preferencias -->
