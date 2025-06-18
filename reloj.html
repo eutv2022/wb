@@ -92,25 +92,45 @@
     });
 
 <!-- Actualizar reloj -->
-    function updateClock() {
-      const now = new Date();
-      let hours = now.getHours();
-      const minutes = now.getMinutes().toString().padStart(2, '0');
-      const seconds = now.getSeconds().toString().padStart(2, '0');
-      const format = formatSelect.value;
+   // Obtener el botón y el formato guardado
+const formatoBtn = document.getElementById('toggleFormato');
+let formato = localStorage.getItem('timeFormat') || '24';
 
-      let ampm = '';
-      if (format === '12') {
-        ampm = hours >= 12 ? 'PM' : 'AM';
-        hours = hours % 12 || 12;
-      }
+// Función para actualizar el texto del botón
+function actualizarTextoBoton() {
+  formatoBtn.textContent = formato === '24'
+    ? 'Cambiar a 12h'
+    : 'Cambiar a 24h';
+}
+actualizarTextoBoton();
 
-      const hourStr = hours.toString().padStart(2, '0');
-      reloj.textContent = `${hourStr}:${minutes}:${seconds} ${ampm}`.trim();
-    }
+// Lógica del botón toggle
+formatoBtn.addEventListener('click', () => {
+  formato = formato === '24' ? '12' : '24';
+  localStorage.setItem('timeFormat', formato);
+  actualizarTextoBoton();
+});
 
-    setInterval(updateClock, 1000);
-    updateClock();
+// Función para mostrar el reloj con el formato actual
+function updateClock() {
+  const now = new Date();
+  let hours = now.getHours();
+  const minutes = now.getMinutes().toString().padStart(2, '0');
+  const seconds = now.getSeconds().toString().padStart(2, '0');
+
+  let ampm = '';
+  if (formato === '12') {
+    ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12 || 12;
+  }
+
+  const horaFinal = `${hours.toString().padStart(2, '0')}:${minutes}:${seconds} ${ampm}`;
+  document.getElementById('reloj').textContent = horaFinal.trim();
+}
+
+setInterval(updateClock, 1000);
+updateClock();
+
   </script>
 </body>
 </html>
