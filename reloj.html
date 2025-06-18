@@ -14,13 +14,23 @@
       justify-content: center;
       height: 100vh;
       margin: 0;
+      transition: background-color 0.5s ease, color 0.5s ease;
+
     }
+    
+#reloj.animar {
+  animation: fade 0.3s ease;
+}
 
     #reloj {
       font-size: 60px;
       margin-top: 20px;
     }
-
+    #fecha {
+  font-size: 34px;
+  margin-top: 10px;
+  color: inherit;
+    }
     button {
       margin-top: 20px;
       padding: 10px 20px;
@@ -55,12 +65,47 @@
       background-color: #cccccc;
       color: #000000;
     }
+    /* NUEVO: animación del reloj */
+    @keyframes fade {
+  from { opacity: 0; transform: scale(0.98); }
+  to   { opacity: 1; transform: scale(1); }
+}
+ #reloj.animar {
+    animation: fade 0.3s ease;
+  }
+  #zonasHorarias {
+  position: absolute;
+  left: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#zonasHorarias button {
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 6px;
+  background-color: #00ff99;
+  color: #1e1e1e;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
   </style>
 </head>
 <body>
 
   <h1>Mi Reloj Digital</h1>
   <div id="reloj">00:00:00</div>
+<div id="fecha">Cargando fecha...</div>
+<div id="zonasHorarias">
+  <button data-offset="-4">🇻🇪 Venezuela</button>
+  <button data-offset="-5">🇨🇴 Colombia</button>
+  <button data-offset="2">🇪🇸 España</button>
+</div>
 
   <button id="toggleFormato">Cambiar a 12h</button>
   <button id="toggleModo">☀️ Activar modo claro</button>
@@ -102,9 +147,28 @@
 
     function updateClock() {
       const now = new Date();
-      let hours = now.getHours();
-      const minutes = now.getMinutes().toString().padStart(2, '0');
-      const seconds = now.getSeconds().toString().padStart(2, '0');
+  // Convertimos a UTC, luego le aplicamos el offset
+  const utc = now.getTime() + now.getTimezoneOffset() * 60000;
+  const local = new Date(utc + offset * 3600000);
+
+  let hours = local.getHours();
+  const minutes = local.getMinutes().toString().padStart(2, '0');
+  const seconds = local.getSeconds().toString().padStart(2, '0');
+      function updateDate() {
+  const now = new Date();
+  const dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+  const meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+
+  const diaSemana = dias[now.getDay()];
+  const dia = now.getDate();
+  const mes = meses[now.getMonth()];
+  const año = now.getFullYear();
+
+  const fechaTexto = `${diaSemana}, ${dia} de ${mes} de ${año}`;
+  document.getElementById('fecha').textContent = fechaTexto;
+}
+
+updateDate(); // se puede llamar una sola vez al cargar
 
       let ampm = '';
       if (formato === '12') {
@@ -113,8 +177,21 @@
       }
 
       const horaFinal = `${hours.toString().padStart(2, '0')}:${minutes}:${seconds} ${ampm}`;
-      reloj.textContent = horaFinal.trim();
+  document.getElementById('reloj').textContent = horaFinal.trim();
+      // Animar cambio
+      reloj.classList.remove('animar');
+      void reloj.offsetWidth;
+      reloj.classList.add('animar');
     }
+    let offset = parseInt(localStorage.getItem('timezoneOffset') || '0');
+
+document.querySelectorAll('#zonasHorarias button').forEach(button => {
+  button.addEventListener('click', () => {
+    offset = parseInt(button.dataset.offset);
+    localStorage.setItem('timezoneOffset', offset);
+    updateClock();
+  });
+});
 
     setInterval(updateClock, 1000);
     updateClock();

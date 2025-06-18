@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Reloj Animado</title>
+  <style>
+    body {
+      background: #111;
+      color: #0f0;
+      font-family: 'Courier New', monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    #reloj {
+      font-size: 80px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .digit {
+      position: relative;
+      display: inline-block;
+      width: 70px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .digit span {
+      display: block;
+      transition: all 0.5s ease-in-out;
+    }
+
+    .digit.exit {
+      transform: scale(0.5);
+      opacity: 0;
+      filter: blur(4px);
+    }
+
+    .digit.enter {
+      transform: scale(1.2);
+      opacity: 0;
+      filter: blur(4px);
+    }
+
+    .digit.enter.active {
+      transform: scale(1);
+      opacity: 1;
+      filter: blur(0);
+    }
+  </style>
+</head>
+<body>
+
+  <div id="reloj">
+    <div class="digit"><span>00</span></div> <span>:</span>
+    <div class="digit"><span>00</span></div> <span>:</span>
+    <div class="digit"><span>00</span></div>
+  </div>
+
+  <script>
+    const digitEls = document.querySelectorAll('.digit');
+
+    function updateClock() {
+      const now = new Date();
+      const parts = [
+        now.getHours().toString().padStart(2,'0'),
+        now.getMinutes().toString().padStart(2,'0'),
+        now.getSeconds().toString().padStart(2,'0')
+      ];
+
+      parts.forEach((val, idx) => {
+        const digitEl = digitEls[idx];
+        const oldSpan = digitEl.querySelector('span');
+
+        if (oldSpan.textContent !== val) {
+          const newSpan = document.createElement('span');
+          newSpan.textContent = val;
+          newSpan.classList.add('enter');
+
+          digitEl.appendChild(newSpan);
+
+          // Trigger reflow to enable transition
+          void newSpan.offsetWidth;
+
+          newSpan.classList.add('active');
+          oldSpan.classList.add('exit');
+
+          setTimeout(() => {
+            digitEl.removeChild(oldSpan);
+          }, 500);
+        }
+      });
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock();
+  </script>
+
+</body>
+</html>
