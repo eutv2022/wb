@@ -1,156 +1,119 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <style>
-  body {
-    background: #1e1e1e;
-    color: #00ff99;
-    font-family: 'Courier New', monospace;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    margin: 0;
-  }
-  #reloj {
-    font-size: 60px;
-    margin-top: 20px;
-  }
-    button {
-  margin-top: 30px;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-/* Estilos para el modo claro */
-.claro {
-  background: #ffffff;
-  color: #000000;
-}
-// Stilo boton 12-24
-    .format-toggle {
-  margin-top: 1rem;
-  font-size: 1rem;
-  color: inherit;
-}
-#formatSelect {
-  margin-left: 0.5rem;
-  padding: 0.25rem;
-  border-radius: 5px;
-}
-
-</style>
-
   <meta charset="UTF-8">
   <title>Reloj Digital</title>
+  <style>
+    body {
+      background: #1e1e1e;
+      color: #00ff99;
+      font-family: 'Courier New', monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    #reloj {
+      font-size: 60px;
+      margin-top: 20px;
+    }
+    button {
+      margin-top: 30px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    /* Modo claro */
+    .claro {
+      background: #ffffff;
+      color: #000000;
+    }
+
+    /* Selector 12/24 */
+    .format-toggle {
+      margin-top: 1rem;
+      font-size: 1rem;
+      color: inherit;
+    }
+    #formatSelect {
+      margin-left: 0.5rem;
+      padding: 0.25rem;
+      border-radius: 5px;
+    }
+  </style>
 </head>
 <body>
 
   <h1>Mi Reloj Digital</h1>
   <div id="reloj">00:00:00</div>
-// Botones
-//Formato 12-24
+
+  <!-- Formato 12h / 24h -->
   <div class="format-toggle">
-  <label for="formatSelect">Formato:</label>
-  <select id="formatSelect">
-    <option value="24">24h</option>
-    <option value="12">12h</option>
-  </select>
-</div>
-//Toogle Modos claro y oscuro
-<button id="toggleModo">☀️ Activar modo claro</button>
+    <label for="formatSelect">Formato:</label>
+    <select id="formatSelect">
+      <option value="24">24h</option>
+      <option value="12">12h</option>
+    </select>
+  </div>
 
-<script>
-  function actualizarReloj() {
-    const ahora = new Date(); // Fecha y hora actual
+  <!-- Botón modo claro/oscuro -->
+  <button id="toggleModo">☀️ Activar modo claro</button>
 
-    let horas = ahora.getHours();      // devuelve 0–23
-    let minutos = ahora.getMinutes();  // devuelve 0–59
-    let segundos = ahora.getSeconds(); // devuelve 0–59
+  <script>
+    const reloj = document.getElementById('reloj');
+    const formatSelect = document.getElementById('formatSelect');
+    const toggleModoBtn = document.getElementById('toggleModo');
 
-    const ampm = horas >= 12 ? 'PM' : 'AM'; // si es mayor de 12 → PM
+    // Cargar preferencias
+    const savedFormat = localStorage.getItem('timeFormat') || '24';
+    formatSelect.value = savedFormat;
 
-    // Convertimos de formato 24h a 12h
-    horas = horas % 12;
-    if (horas === 0) horas = 12;
+    const modoGuardado = localStorage.getItem('modo');
+    if (modoGuardado === 'claro') {
+      document.body.classList.add('claro');
+      toggleModoBtn.innerHTML = '🌙 Activar modo oscuro';
+    }
 
-    // Añadir ceros delante si es necesario
-    if (horas < 10) horas = '0' + horas;
-    if (minutos < 10) minutos = '0' + minutos;
-    if (segundos < 10) segundos = '0' + segundos;
+    // Cambiar formato y guardar
+    formatSelect.addEventListener('change', () => {
+      localStorage.setItem('timeFormat', formatSelect.value);
+    });
 
-    // Unimos todo en una cadena
-    const horaFinal = `${horas}:${minutos}:${segundos} ${ampm}`;
+    // Cambiar modo claro/oscuro
+    toggleModoBtn.addEventListener('click', () => {
+      document.body.classList.toggle('claro');
+      if (document.body.classList.contains('claro')) {
+        toggleModoBtn.innerHTML = '🌙 Activar modo oscuro';
+        localStorage.setItem('modo', 'claro');
+      } else {
+        toggleModoBtn.innerHTML = '☀️ Activar modo claro';
+        localStorage.setItem('modo', 'oscuro');
+      }
+    });
 
-    // Ponemos el resultado dentro del HTML
-    document.getElementById('reloj').textContent = horaFinal;
-  }
+    // Actualizar reloj
+    function updateClock() {
+      const now = new Date();
+      let hours = now.getHours();
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      const seconds = now.getSeconds().toString().padStart(2, '0');
+      const format = formatSelect.value;
 
-  // Llamar a la función cada segundo
-  setInterval(actualizarReloj, 1000);
+      let ampm = '';
+      if (format === '12') {
+        ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12 || 12;
+      }
 
-  // Llamarla inmediatamente para que no se vea en blanco al cargar
-  actualizarReloj();
-  // Lógica del botón de modo claro/oscuro
-const boton = document.getElementById('toggleModo');
-// Aplicar el modo guardado al cargar la página
-const modoGuardado = localStorage.getItem('modo');
-//Activa el LocalStorage al cargar la pagina
-if (modoGuardado === 'claro') {
-  document.body.classList.add('claro');
-  document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('toggleModo').innerHTML = '🌙 Activar modo oscuro';
-  });
-}
-  // LocalStorage: Almacena preferencias
-boton.addEventListener('click', () => {
-  document.body.classList.toggle('claro');
+      const hourStr = hours.toString().padStart(2, '0');
+      reloj.textContent = `${hourStr}:${minutes}:${seconds} ${ampm}`.trim();
+    }
 
-  if (document.body.classList.contains('claro')) {
-    boton.innerHTML = '🌙 Activar modo oscuro';
-    localStorage.setItem('modo', 'claro');
-  } else {
-    boton.innerHTML = '☀️ Activar modo claro';
-    localStorage.setItem('modo', 'oscuro');
-  }
-});
-// Script logica de formato 12-24
-  const formatSelect = document.getElementById('formatSelect');
-
-// Cargar formato guardado
-const savedFormat = localStorage.getItem('timeFormat') || '24';
-formatSelect.value = savedFormat;
-
-// Actualizar formato al cambiar el selector
-formatSelect.addEventListener('change', () => {
-  localStorage.setItem('timeFormat', formatSelect.value);
-});
-
-// Función para mostrar la hora
-function updateClock() {
-  const now = new Date();
-  let hours = now.getHours();
-  const minutes = now.getMinutes().toString().padStart(2, '0');
-  const seconds = now.getSeconds().toString().padStart(2, '0');
-  const format = formatSelect.value;
-
-  let ampm = '';
-  if (format === '12') {
-    ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12 || 12; // convierte 0 en 12
-  }
-
-  const timeString = `${hours.toString().padStart(2, '0')}:${minutes}:${seconds} ${ampm}`;
-  document.getElementById('clock').textContent = timeString.trim();
-}
-
-// Actualizar cada segundo
-setInterval(updateClock, 1000);
-updateClock();
-
-</script>
-
+    setInterval(updateClock, 1000);
+    updateClock();
+  </script>
 </body>
 </html>
+
