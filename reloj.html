@@ -92,11 +92,11 @@
     });
 
 <!-- Actualizar reloj -->
-   // Obtener el botón y el formato guardado
+   <!-- Obtener el botón y el formato guardado -->
 const formatoBtn = document.getElementById('toggleFormato');
 let formato = localStorage.getItem('timeFormat') || '24';
 
-// Función para actualizar el texto del botón
+<!-- Función para actualizar el texto del botón -->
 function actualizarTextoBoton() {
   formatoBtn.textContent = formato === '24'
     ? 'Cambiar a 12h'
@@ -104,14 +104,14 @@ function actualizarTextoBoton() {
 }
 actualizarTextoBoton();
 
-// Lógica del botón toggle
+<!-- Lógica del botón toggle -->
 formatoBtn.addEventListener('click', () => {
   formato = formato === '24' ? '12' : '24';
   localStorage.setItem('timeFormat', formato);
   actualizarTextoBoton();
 });
 
-// Función para mostrar el reloj con el formato actual
+<!-- Función para mostrar el reloj con el formato actual -->
 function updateClock() {
   const now = new Date();
   let hours = now.getHours();
