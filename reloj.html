@@ -95,6 +95,8 @@
 }
 
   </style>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#00ff99">
 </head>
 <body>
 
@@ -195,6 +197,12 @@ document.querySelectorAll('#zonasHorarias button').forEach(button => {
 
     setInterval(updateClock, 1000);
     updateClock();
+  if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('service-worker.js')
+    .then(reg => console.log('Service Worker registrado', reg))
+    .catch(err => console.log('Error al registrar SW:', err));
+}
+
   </script>
 </body>
 </html>
