@@ -29,6 +29,17 @@
   background: #ffffff;
   color: #000000;
 }
+// Stilo boton 12-24
+    .format-toggle {
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: inherit;
+}
+#formatSelect {
+  margin-left: 0.5rem;
+  padding: 0.25rem;
+  border-radius: 5px;
+}
 
 </style>
 
@@ -39,6 +50,16 @@
 
   <h1>Mi Reloj Digital</h1>
   <div id="reloj">00:00:00</div>
+// Botones
+//Formato 12-24
+  <div class="format-toggle">
+  <label for="formatSelect">Formato:</label>
+  <select id="formatSelect">
+    <option value="24">24h</option>
+    <option value="12">12h</option>
+  </select>
+</div>
+//Toogle Modos claro y oscuro
 <button id="toggleModo">☀️ Activar modo claro</button>
 
 <script>
@@ -95,6 +116,39 @@ boton.addEventListener('click', () => {
     localStorage.setItem('modo', 'oscuro');
   }
 });
+// Script logica de formato 12-24
+  const formatSelect = document.getElementById('formatSelect');
+
+// Cargar formato guardado
+const savedFormat = localStorage.getItem('timeFormat') || '24';
+formatSelect.value = savedFormat;
+
+// Actualizar formato al cambiar el selector
+formatSelect.addEventListener('change', () => {
+  localStorage.setItem('timeFormat', formatSelect.value);
+});
+
+// Función para mostrar la hora
+function updateClock() {
+  const now = new Date();
+  let hours = now.getHours();
+  const minutes = now.getMinutes().toString().padStart(2, '0');
+  const seconds = now.getSeconds().toString().padStart(2, '0');
+  const format = formatSelect.value;
+
+  let ampm = '';
+  if (format === '12') {
+    ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12 || 12; // convierte 0 en 12
+  }
+
+  const timeString = `${hours.toString().padStart(2, '0')}:${minutes}:${seconds} ${ampm}`;
+  document.getElementById('clock').textContent = timeString.trim();
+}
+
+// Actualizar cada segundo
+setInterval(updateClock, 1000);
+updateClock();
 
 </script>
 
